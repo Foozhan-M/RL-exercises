@@ -148,6 +148,32 @@ class MarsRover(gym.Env):
 
         return self.position, reward, terminated, truncated, {}
 
+        
+    def get_next_state(self, state: int, action: int) -> int:
+        """
+        Return the next state after taking an action in a given state.
+
+        Parameters
+        ----------
+        state : int
+            Current state.
+        action : int
+            Action to take (0: left, 1: right).
+
+        Returns
+        -------
+        int
+            Next state after applying the action, clipped to boundaries.
+        """
+        if action not in [0, 1]:
+            raise ValueError("Action must be 0 (left) or 1 (right).")
+
+        delta = -1 if action == 0 else 1
+        next_state = state + delta
+        next_state = max(0, min(self.observation_space.n - 1, next_state))
+        return next_state
+
+
     def get_reward_per_action(self) -> np.ndarray:
         """
         Return the expected reward function R[s, a] for each (state, action) pair.
@@ -189,7 +215,13 @@ class MarsRover(gym.Env):
             The resulting state.
         """
         # TODO: Implement the environment dynamics to determine the next state
-        return state
+        if action not in [0, 1]:
+            raise ValueError("Action must be 0 (left) or 1 (right).")
+
+        delta = -1 if action == 0 else 1
+        next_state = state + delta
+        next_state = max(0, min(self.observation_space.n - 1, next_state))
+        return next_state
 
     def get_transition_matrix(
         self,
@@ -220,10 +252,16 @@ class MarsRover(gym.Env):
 
         nS, nA = len(S), len(A)
         T = np.zeros((nS, nA, nS), dtype=float)
-        # TODO: Determine the transition matrix using the get_next_state function
-        # and the transition probabilities P.
+        for s in S:
+            for a in A:
+                intended_next = self.get_next_state(s, a)
+                flipped_next = self.get_next_state(s, 1 - a)
+
+                T[s, a, intended_next] += float(P[s, a])
+                T[s, a, flipped_next] += float(1.0 - P[s, a])
 
         return T
+
 
     def render(self, mode: str = "human"):
         """
@@ -329,6 +367,9 @@ class MarsRoverPartialObsWrapper(gym.Wrapper):
         true_obs, reward, terminated, truncated, info = self.env.step(action)
         return self._noisy_obs(true_obs), reward, terminated, truncated, info
 
+    
+    
+    
     def _noisy_obs(self, true_obs: int) -> int:
         """
         Return a possibly noisy version of the true observation.

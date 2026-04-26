@@ -1,0 +1,5 @@
+We can't use policy iteration and value iteration directly if we only have access to the step() function. These algorithms must have full access to the dynamics of the environment, such as the transition probabilities T[s,a,s'] and the reward function R[s,a].
+
+We can only sample transitions and rewards with step(), not the whole model. So, we can't figure out the expected values we need for the Bellman updates.
+
+In this case, we would have to either estimate the model from data or switch to model-free methods like Q-learning, which learn directly from experience.
