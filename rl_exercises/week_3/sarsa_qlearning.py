@@ -108,7 +108,7 @@ class TDAgent(AbstractAgent):
         if self.algorithm == "sarsa":
             # TODO: Get the next action for the lookahead in SARSA using the policy of this agent.
             # next_action = 0
-            next_action = self.policy(self.Q, next_state)
+            next_action, _ = self.predict_action(next_state)
             return self.SARSA(state, action, reward, next_state, next_action, done)
         else:
             return self.Q_Learning(state, action, reward, next_state, done)
@@ -152,13 +152,14 @@ class TDAgent(AbstractAgent):
         # update the new Q value in the Q table of this class.
         # Return the new Q value --currently always returns 0.0
         current_q = self.Q[state][action]
+
         if done:
             target = reward
         else:
             target = reward + self.gamma * self.Q[next_state][next_action]
 
-        # TD update
-        self.Q[state][action] += self.alpha * (target - current_q)
+        td_error = target - current_q
+        self.Q[state][action] += self.alpha * td_error
 
         return self.Q[state][action]
 
@@ -194,5 +195,18 @@ class TDAgent(AbstractAgent):
 
         # Q learning update rule
         # TODO: Implement the Q-Learning update rule here.
+        
+        current_q = self.Q[state][action]
 
-        return 0.0
+        # Target for terminal vs non-terminal state
+        if done:
+            target = reward
+        else:
+            target = reward + self.gamma * np.max(self.Q[next_state])
+
+        # TD update
+        td_error = target - current_q
+        self.Q[state][action] += self.alpha * td_error
+
+        return self.Q[state][action]
+

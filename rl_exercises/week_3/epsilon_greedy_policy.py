@@ -53,13 +53,19 @@ class EpsilonGreedyPolicy(object):
             action
         """
 
-        # If evaluation mode, skip exploration entirely
+        # Evaluation mode: pure greedy policy
         if evaluate:
-            return int(np.argmax(Q[state]))
+            q_values = Q[state]
+            max_q = np.max(q_values)
+            best_actions = np.flatnonzero(q_values == max_q)
+            return int(self.rng.choice(best_actions))
 
-        # TODO: Implement epsilon-greedy action selection
-        rand_val = self.rng.random()
-        if rand_val < self.epsilon:
+        # Exploration
+        if self.rng.random() < self.epsilon:
             return int(self.rng.integers(self.env.action_space.n))
-        else:
-            return int(np.argmax(Q[state]))
+
+        # Exploitation with random tie-breaking
+        q_values = Q[state]
+        max_q = np.max(q_values)
+        best_actions = np.flatnonzero(q_values == max_q)
+        return int(self.rng.choice(best_actions))

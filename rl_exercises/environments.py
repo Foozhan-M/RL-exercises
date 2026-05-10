@@ -174,7 +174,6 @@ class MarsRover(gym.Env):
                 R[s, a] = float(expected_reward)
         return R
 
-
     def get_next_state(self, state: int, action: int) -> int:
         """
         Get the next state given a state and an action (assuming deterministic execution).

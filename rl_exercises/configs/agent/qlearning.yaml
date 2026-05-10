@@ -6,7 +6,7 @@ hydra:
 agent: qlearning
 agent_name: qlearning
 batch_size: 0
-training_steps: 1500
+training_steps: 15000
 alpha: 0.9
 gamma: 0.95
 epsilon: 0.2
