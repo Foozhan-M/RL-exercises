@@ -1,0 +1,408 @@
+List of all experiments:
+    (batch_size)
+    -DQN on CartPole-v1-(hidden-dim=64, buffer_capacity=10000, batch_size=32)
+    -DQN on CartPole-v2-(hidden-dim=64, buffer_capacity=10000, batch_size=16)
+    -DQN on CartPole-v3-(hidden-dim=64, buffer_capacity=10000, batch_size=128)
+
+    (buffer_capacity)
+    -DQN on CartPole-v4-(hidden-dim=64, buffer_capacity=1000, batch_size=32)
+    -DQN on CartPole-v5-(hidden-dim=64, buffer_capacity=50000, batch_size=32)
+
+    (hidden_dim)
+    -DQN on CartPole-v6-(hidden-dim=128, buffer_capacity=10000, batch_size=32)
+    -DQN on CartPole-v7-(hidden-dim=256, buffer_capacity=10000, batch_size=32)
+    
+    (all-low)
+    -DQN on CartPole-v8-(hidden-dim=64, buffer_capacity=1000, batch_size=16)
+
+    (all-high)
+    -DQN on CartPole-v9-(hidden-dim=256, buffer_capacity=50000, batch_size=128)
+
+Observations:
+    The baseline configuration (hidden_dim=64, buffer_capacity=10000, batch_size=32) learned successfully and achieved stable convergence after approximately 5000–8000 frames. The average reward increased gradually from around 10–20 during exploration to above 250 reward near the end of training.
+
+    Effect of Batch Size
+    Changing the batch size affected both learning stability and convergence speed. Smaller batch sizes (batch_size=16) produced noisier updates but still achieved strong final performance. Larger batch sizes (batch_size=128) resulted in smoother optimization and occasionally higher peak rewards, although learning tended to start more slowly during the early stages of training.
+
+    Effect of Replay Buffer Capacity
+    Replay buffer size had a noticeable effect on stability. A small replay buffer (buffer_capacity=1000) caused unstable learning and large performance drops after initially achieving high rewards. This is likely due to reduced transition diversity and overfitting to recent experiences. Larger replay buffers (buffer_capacity=50000) produced more stable training curves and smoother convergence behavior.
+
+    Effect of Network Width (hidden_dim)
+    Increasing the hidden dimension from 64 to 128 and 256 generally improved the representational capacity of the Q-network. Wider networks learned faster and often achieved higher peak rewards. However, larger networks also introduced slightly higher variance and instability during later stages of training.
+
+    Combined Configurations
+    The “all-low” configuration (hidden_dim=64, buffer_capacity=1000, batch_size=16) showed the least stable behavior and lower overall performance. In contrast, the “all-high” configuration (hidden_dim=256, buffer_capacity=50000, batch_size=128) achieved the highest peak reward during training, but also demonstrated some instability after rapid improvement.
+
+    Overall, the experiments demonstrate that DQN performance is highly sensitive to replay buffer size, network capacity, and batch size. Larger replay buffers and wider networks generally improved performance, while extremely small buffers reduced training stability.
+
+Outputs:
+
+    DQN on CartPole-v1-(hidden-dim=64, buffer_capacity=10000, batch_size=32):
+    Frame 201, AvgReward(10): 20.10, ε=0.715
+    Frame 337, AvgReward(10): 13.60, ε=0.547
+    Frame 465, AvgReward(10): 12.80, ε=0.426
+    Frame 584, AvgReward(10): 11.90, ε=0.338
+    Frame 701, AvgReward(10): 11.70, ε=0.269
+    Frame 809, AvgReward(10): 10.80, ε=0.219
+    Frame 914, AvgReward(10): 10.50, ε=0.179
+    Frame 1021, AvgReward(10): 10.70, ε=0.147
+    Frame 1138, AvgReward(10): 11.70, ε=0.118
+    Frame 1242, AvgReward(10): 10.40, ε=0.098
+    Frame 1348, AvgReward(10): 10.60, ε=0.081
+    Frame 1443, AvgReward(10): 9.50, ε=0.069
+    Frame 1554, AvgReward(10): 11.10, ε=0.057
+    Frame 1650, AvgReward(10): 9.60, ε=0.049
+    Frame 1747, AvgReward(10): 9.70, ε=0.042
+    Frame 1851, AvgReward(10): 10.40, ε=0.036
+    Frame 1953, AvgReward(10): 10.20, ε=0.031
+    Frame 2058, AvgReward(10): 10.50, ε=0.027
+    Frame 2171, AvgReward(10): 11.30, ε=0.024
+    Frame 2276, AvgReward(10): 10.50, ε=0.021
+    Frame 2370, AvgReward(10): 9.40, ε=0.019
+    Frame 2497, AvgReward(10): 12.70, ε=0.017
+    Frame 2621, AvgReward(10): 12.40, ε=0.016
+    Frame 2770, AvgReward(10): 14.90, ε=0.014
+    Frame 2902, AvgReward(10): 13.20, ε=0.013
+    Frame 3031, AvgReward(10): 12.90, ε=0.012
+    Frame 3158, AvgReward(10): 12.70, ε=0.012
+    Frame 3493, AvgReward(10): 33.50, ε=0.011
+    Frame 4029, AvgReward(10): 53.60, ε=0.010
+    Frame 5892, AvgReward(10): 186.30, ε=0.010
+    Frame 7804, AvgReward(10): 191.20, ε=0.010
+    Frame 10066, AvgReward(10): 226.20, ε=0.010
+    Frame 11928, AvgReward(10): 186.20, ε=0.010
+    Frame 13630, AvgReward(10): 170.20, ε=0.010
+    Frame 15945, AvgReward(10): 231.50, ε=0.010
+    Frame 18790, AvgReward(10): 284.50, ε=0.010
+    Training complete.
+
+    -------------------------------------------------------------------------------------------------------
+
+    DQN on CartPole-v2-(hidden-dim=64, buffer_capacity=10000, batch_size=16):
+    Frame 185, AvgReward(10): 18.50, ε=0.715
+    Frame 334, AvgReward(10): 14.90, ε=0.533
+    Frame 470, AvgReward(10): 13.60, ε=0.408
+    Frame 580, AvgReward(10): 11.00, ε=0.330
+    Frame 683, AvgReward(10): 10.30, ε=0.270
+    Frame 794, AvgReward(10): 11.10, ε=0.218
+    Frame 910, AvgReward(10): 11.60, ε=0.175
+    Frame 1010, AvgReward(10): 10.00, ε=0.145
+    Frame 1151, AvgReward(10): 14.10, ε=0.112
+    Frame 1258, AvgReward(10): 10.70, ε=0.092
+    Frame 1355, AvgReward(10): 9.70, ε=0.078
+    Frame 1450, AvgReward(10): 9.50, ε=0.066
+    Frame 1544, AvgReward(10): 9.40, ε=0.057
+    Frame 1637, AvgReward(10): 9.30, ε=0.049
+    Frame 1733, AvgReward(10): 9.60, ε=0.042
+    Frame 1845, AvgReward(10): 11.20, ε=0.035
+    Frame 1962, AvgReward(10): 11.70, ε=0.030
+    Frame 2063, AvgReward(10): 10.10, ε=0.026
+    Frame 2163, AvgReward(10): 10.00, ε=0.023
+    Frame 2318, AvgReward(10): 15.50, ε=0.020
+    Frame 2468, AvgReward(10): 15.00, ε=0.017
+    Frame 2591, AvgReward(10): 12.30, ε=0.016
+    Frame 2729, AvgReward(10): 13.80, ε=0.014
+    Frame 2836, AvgReward(10): 10.70, ε=0.014
+    Frame 2963, AvgReward(10): 12.70, ε=0.013
+    Frame 3095, AvgReward(10): 13.20, ε=0.012
+    Frame 3621, AvgReward(10): 52.60, ε=0.011
+    Frame 4279, AvgReward(10): 65.80, ε=0.010
+    Frame 5567, AvgReward(10): 128.80, ε=0.010
+    Frame 7317, AvgReward(10): 175.00, ε=0.010
+    Frame 8976, AvgReward(10): 165.90, ε=0.010
+    Frame 10948, AvgReward(10): 197.20, ε=0.010
+    Frame 12921, AvgReward(10): 197.30, ε=0.010
+    Frame 14846, AvgReward(10): 192.50, ε=0.010
+    Frame 17256, AvgReward(10): 241.00, ε=0.010
+    Frame 19975, AvgReward(10): 271.90, ε=0.010
+    Training complete.
+
+    -------------------------------------------------------------------------------------------------------
+
+    DQN on CartPole-v3-(hidden-dim=64, buffer_capacity=10000, batch_size=128):
+    Frame 234, AvgReward(10): 23.40, ε=0.809
+    Frame 383, AvgReward(10): 14.90, ε=0.603
+    Frame 521, AvgReward(10): 13.80, ε=0.460
+    Frame 657, AvgReward(10): 13.60, ε=0.353
+    Frame 769, AvgReward(10): 11.20, ε=0.284
+    Frame 872, AvgReward(10): 10.30, ε=0.233
+    Frame 986, AvgReward(10): 11.40, ε=0.188
+    Frame 1095, AvgReward(10): 10.90, ε=0.153
+    Frame 1194, AvgReward(10): 9.90, ε=0.127
+    Frame 1335, AvgReward(10): 14.10, ε=0.098
+    Frame 1468, AvgReward(10): 13.30, ε=0.078
+    Frame 1563, AvgReward(10): 9.50, ε=0.066
+    Frame 1661, AvgReward(10): 9.80, ε=0.056
+    Frame 1787, AvgReward(10): 12.60, ε=0.046
+    Frame 1906, AvgReward(10): 11.90, ε=0.038
+    Frame 2007, AvgReward(10): 10.10, ε=0.033
+    Frame 2166, AvgReward(10): 15.90, ε=0.027
+    Frame 2711, AvgReward(10): 54.50, ε=0.016
+    Frame 3208, AvgReward(10): 49.70, ε=0.012
+    Frame 4540, AvgReward(10): 133.20, ε=0.010
+    Frame 6249, AvgReward(10): 170.90, ε=0.010
+    Frame 8118, AvgReward(10): 186.90, ε=0.010
+    Frame 9866, AvgReward(10): 174.80, ε=0.010
+    Frame 11493, AvgReward(10): 162.70, ε=0.010
+    Frame 13172, AvgReward(10): 167.90, ε=0.010
+    Frame 15124, AvgReward(10): 195.20, ε=0.010
+    Frame 18282, AvgReward(10): 315.80, ε=0.010
+    Training complete.
+
+    -------------------------------------------------------------------------------------------------------
+
+    DQN on CartPole-v4-(hidden-dim=64, buffer_capacity=1000, batch_size=32):
+    Frame 201, AvgReward(10): 20.10, ε=0.715
+    Frame 337, AvgReward(10): 13.60, ε=0.547
+    Frame 465, AvgReward(10): 12.80, ε=0.426
+    Frame 584, AvgReward(10): 11.90, ε=0.338
+    Frame 701, AvgReward(10): 11.70, ε=0.269
+    Frame 809, AvgReward(10): 10.80, ε=0.219
+    Frame 914, AvgReward(10): 10.50, ε=0.179
+    Frame 1022, AvgReward(10): 10.80, ε=0.146
+    Frame 1138, AvgReward(10): 11.60, ε=0.118
+    Frame 1265, AvgReward(10): 12.70, ε=0.094
+    Frame 1378, AvgReward(10): 11.30, ε=0.077
+    Frame 1477, AvgReward(10): 9.90, ε=0.065
+    Frame 1577, AvgReward(10): 10.00, ε=0.055
+    Frame 1674, AvgReward(10): 9.70, ε=0.047
+    Frame 1779, AvgReward(10): 10.50, ε=0.040
+    Frame 1878, AvgReward(10): 9.90, ε=0.035
+    Frame 1976, AvgReward(10): 9.80, ε=0.030
+    Frame 2084, AvgReward(10): 10.80, ε=0.026
+    Frame 2176, AvgReward(10): 9.20, ε=0.024
+    Frame 2269, AvgReward(10): 9.30, ε=0.021
+    Frame 2381, AvgReward(10): 11.20, ε=0.019
+    Frame 2473, AvgReward(10): 9.20, ε=0.017
+    Frame 2566, AvgReward(10): 9.30, ε=0.016
+    Frame 2659, AvgReward(10): 9.30, ε=0.015
+    Frame 2752, AvgReward(10): 9.30, ε=0.014
+    Frame 2852, AvgReward(10): 10.00, ε=0.014
+    Frame 2945, AvgReward(10): 9.30, ε=0.013
+    Frame 3044, AvgReward(10): 9.90, ε=0.012
+    Frame 3137, AvgReward(10): 9.30, ε=0.012
+    Frame 3233, AvgReward(10): 9.60, ε=0.012
+    Frame 3373, AvgReward(10): 14.00, ε=0.011
+    Frame 3512, AvgReward(10): 13.90, ε=0.011
+    Frame 3660, AvgReward(10): 14.80, ε=0.011
+    Frame 3861, AvgReward(10): 20.10, ε=0.010
+    Frame 4060, AvgReward(10): 19.90, ε=0.010
+    Frame 5338, AvgReward(10): 127.80, ε=0.010
+    Frame 7514, AvgReward(10): 217.60, ε=0.010
+    Frame 10125, AvgReward(10): 261.10, ε=0.010
+    Frame 11717, AvgReward(10): 159.20, ε=0.010
+    Frame 13020, AvgReward(10): 130.30, ε=0.010
+    Frame 13608, AvgReward(10): 58.80, ε=0.010
+    Frame 13803, AvgReward(10): 19.50, ε=0.010
+    Frame 13932, AvgReward(10): 12.90, ε=0.010
+    Frame 14080, AvgReward(10): 14.80, ε=0.010
+    Frame 15881, AvgReward(10): 180.10, ε=0.010
+    Frame 17588, AvgReward(10): 170.70, ε=0.010
+    Frame 19438, AvgReward(10): 185.00, ε=0.010
+    Training complete.
+
+    -------------------------------------------------------------------------------------------------------
+
+    DQN on CartPole-v5-(hidden-dim=64, buffer_capacity=50000, batch_size=32):
+    Frame 201, AvgReward(10): 20.10, ε=0.715
+    Frame 337, AvgReward(10): 13.60, ε=0.547
+    Frame 465, AvgReward(10): 12.80, ε=0.426
+    Frame 584, AvgReward(10): 11.90, ε=0.338
+    Frame 701, AvgReward(10): 11.70, ε=0.269
+    Frame 809, AvgReward(10): 10.80, ε=0.219
+    Frame 914, AvgReward(10): 10.50, ε=0.179
+    Frame 1021, AvgReward(10): 10.70, ε=0.147
+    Frame 1138, AvgReward(10): 11.70, ε=0.118
+    Frame 1242, AvgReward(10): 10.40, ε=0.098
+    Frame 1348, AvgReward(10): 10.60, ε=0.081
+    Frame 1443, AvgReward(10): 9.50, ε=0.069
+    Frame 1554, AvgReward(10): 11.10, ε=0.057
+    Frame 1650, AvgReward(10): 9.60, ε=0.049
+    Frame 1747, AvgReward(10): 9.70, ε=0.042
+    Frame 1851, AvgReward(10): 10.40, ε=0.036
+    Frame 1953, AvgReward(10): 10.20, ε=0.031
+    Frame 2058, AvgReward(10): 10.50, ε=0.027
+    Frame 2171, AvgReward(10): 11.30, ε=0.024
+    Frame 2276, AvgReward(10): 10.50, ε=0.021
+    Frame 2370, AvgReward(10): 9.40, ε=0.019
+    Frame 2497, AvgReward(10): 12.70, ε=0.017
+    Frame 2621, AvgReward(10): 12.40, ε=0.016
+    Frame 2770, AvgReward(10): 14.90, ε=0.014
+    Frame 2902, AvgReward(10): 13.20, ε=0.013
+    Frame 3031, AvgReward(10): 12.90, ε=0.012
+    Frame 3158, AvgReward(10): 12.70, ε=0.012
+    Frame 3493, AvgReward(10): 33.50, ε=0.011
+    Frame 4029, AvgReward(10): 53.60, ε=0.010
+    Frame 5892, AvgReward(10): 186.30, ε=0.010
+    Frame 7804, AvgReward(10): 191.20, ε=0.010
+    Frame 10069, AvgReward(10): 226.50, ε=0.010
+    Frame 12129, AvgReward(10): 206.00, ε=0.010
+    Frame 13904, AvgReward(10): 177.50, ε=0.010
+    Frame 16007, AvgReward(10): 210.30, ε=0.010
+    Frame 17957, AvgReward(10): 195.00, ε=0.010
+    Training complete.
+
+    -------------------------------------------------------------------------------------------------------
+
+
+    DQN on CartPole-v6-(hidden-dim=128, buffer_capacity=10000, batch_size=32):
+    Frame 203, AvgReward(10): 20.30, ε=0.712
+    Frame 325, AvgReward(10): 12.20, ε=0.560
+    Frame 455, AvgReward(10): 13.00, ε=0.434
+    Frame 573, AvgReward(10): 11.80, ε=0.345
+    Frame 701, AvgReward(10): 12.80, ε=0.269
+    Frame 825, AvgReward(10): 12.40, ε=0.212
+    Frame 959, AvgReward(10): 13.40, ε=0.165
+    Frame 1081, AvgReward(10): 12.20, ε=0.131
+    Frame 1178, AvgReward(10): 9.70, ε=0.110
+    Frame 1279, AvgReward(10): 10.10, ε=0.092
+    Frame 1375, AvgReward(10): 9.60, ε=0.077
+    Frame 1487, AvgReward(10): 11.20, ε=0.064
+    Frame 1592, AvgReward(10): 10.50, ε=0.054
+    Frame 1726, AvgReward(10): 13.40, ε=0.043
+    Frame 1831, AvgReward(10): 10.50, ε=0.037
+    Frame 1958, AvgReward(10): 12.70, ε=0.031
+    Frame 2072, AvgReward(10): 11.40, ε=0.027
+    Frame 2160, AvgReward(10): 8.80, ε=0.024
+    Frame 2285, AvgReward(10): 12.50, ε=0.021
+    Frame 2435, AvgReward(10): 15.00, ε=0.018
+    Frame 2549, AvgReward(10): 11.40, ε=0.016
+    Frame 2701, AvgReward(10): 15.20, ε=0.015
+    Frame 2881, AvgReward(10): 18.00, ε=0.013
+    Frame 3013, AvgReward(10): 13.20, ε=0.013
+    Frame 3249, AvgReward(10): 23.60, ε=0.012
+    Frame 3523, AvgReward(10): 27.40, ε=0.011
+    Frame 4173, AvgReward(10): 65.00, ε=0.010
+    Frame 4876, AvgReward(10): 70.30, ε=0.010
+    Frame 6543, AvgReward(10): 166.70, ε=0.010
+    Frame 8752, AvgReward(10): 220.90, ε=0.010
+    Frame 11072, AvgReward(10): 232.00, ε=0.010
+    Frame 13147, AvgReward(10): 207.50, ε=0.010
+    Frame 15157, AvgReward(10): 201.00, ε=0.010
+    Frame 16768, AvgReward(10): 161.10, ε=0.010
+    Frame 18449, AvgReward(10): 168.10, ε=0.010
+    Training complete.
+    -------------------------------------------------------------------------------------------------------
+
+    DQN on CartPole-v7-(hidden-dim=256, buffer_capacity=10000, batch_size=32):
+    Frame 192, AvgReward(10): 19.20, ε=0.727
+    Frame 330, AvgReward(10): 13.80, ε=0.554
+    Frame 439, AvgReward(10): 10.90, ε=0.448
+    Frame 570, AvgReward(10): 13.10, ε=0.347
+    Frame 685, AvgReward(10): 11.50, ε=0.278
+    Frame 797, AvgReward(10): 11.20, ε=0.224
+    Frame 922, AvgReward(10): 12.50, ε=0.177
+    Frame 1020, AvgReward(10): 9.80, ε=0.147
+    Frame 1128, AvgReward(10): 10.80, ε=0.120
+    Frame 1255, AvgReward(10): 12.70, ε=0.096
+    Frame 1366, AvgReward(10): 11.10, ε=0.079
+    Frame 1485, AvgReward(10): 11.90, ε=0.064
+    Frame 1591, AvgReward(10): 10.60, ε=0.054
+    Frame 1703, AvgReward(10): 11.20, ε=0.045
+    Frame 1813, AvgReward(10): 11.00, ε=0.038
+    Frame 1950, AvgReward(10): 13.70, ε=0.031
+    Frame 2089, AvgReward(10): 13.90, ε=0.026
+    Frame 2311, AvgReward(10): 22.20, ε=0.020
+    Frame 2498, AvgReward(10): 18.70, ε=0.017
+    Frame 2679, AvgReward(10): 18.10, ε=0.015
+    Frame 2895, AvgReward(10): 21.60, ε=0.013
+    Frame 3183, AvgReward(10): 28.80, ε=0.012
+    Frame 3760, AvgReward(10): 57.70, ε=0.011
+    Frame 5025, AvgReward(10): 126.50, ε=0.010
+    Frame 7333, AvgReward(10): 230.80, ε=0.010
+    Frame 9410, AvgReward(10): 207.70, ε=0.010
+    Frame 11639, AvgReward(10): 222.90, ε=0.010
+    Frame 14008, AvgReward(10): 236.90, ε=0.010
+    Frame 16898, AvgReward(10): 289.00, ε=0.010
+    Frame 18662, AvgReward(10): 176.40, ε=0.010
+    Training complete.
+
+    -------------------------------------------------------------------------------------------------------
+
+    DQN on CartPole-v8-(hidden-dim=64, buffer_capacity=1000, batch_size=16):
+    Frame 185, AvgReward(10): 18.50, ε=0.715
+    Frame 334, AvgReward(10): 14.90, ε=0.533
+    Frame 470, AvgReward(10): 13.60, ε=0.408
+    Frame 580, AvgReward(10): 11.00, ε=0.330
+    Frame 683, AvgReward(10): 10.30, ε=0.270
+    Frame 794, AvgReward(10): 11.10, ε=0.218
+    Frame 910, AvgReward(10): 11.60, ε=0.175
+    Frame 1011, AvgReward(10): 10.10, ε=0.145
+    Frame 1158, AvgReward(10): 14.70, ε=0.111
+    Frame 1290, AvgReward(10): 13.20, ε=0.087
+    Frame 1417, AvgReward(10): 12.70, ε=0.070
+    Frame 1516, AvgReward(10): 9.90, ε=0.059
+    Frame 1630, AvgReward(10): 11.40, ε=0.049
+    Frame 1725, AvgReward(10): 9.50, ε=0.042
+    Frame 1821, AvgReward(10): 9.60, ε=0.037
+    Frame 1919, AvgReward(10): 9.80, ε=0.032
+    Frame 2015, AvgReward(10): 9.60, ε=0.028
+    Frame 2165, AvgReward(10): 15.00, ε=0.023
+    Frame 2307, AvgReward(10): 14.20, ε=0.020
+    Frame 2412, AvgReward(10): 10.50, ε=0.018
+    Frame 2532, AvgReward(10): 12.00, ε=0.016
+    Frame 2637, AvgReward(10): 10.50, ε=0.015
+    Frame 2764, AvgReward(10): 12.70, ε=0.014
+    Frame 2882, AvgReward(10): 11.80, ε=0.013
+    Frame 3007, AvgReward(10): 12.50, ε=0.012
+    Frame 3130, AvgReward(10): 12.30, ε=0.012
+    Frame 3233, AvgReward(10): 10.30, ε=0.012
+    Frame 3342, AvgReward(10): 10.90, ε=0.011
+    Frame 3481, AvgReward(10): 13.90, ε=0.011
+    Frame 3657, AvgReward(10): 17.60, ε=0.011
+    Frame 3820, AvgReward(10): 16.30, ε=0.010
+    Frame 3966, AvgReward(10): 14.60, ε=0.010
+    Frame 4248, AvgReward(10): 28.20, ε=0.010
+    Frame 5314, AvgReward(10): 106.60, ε=0.010
+    Frame 7242, AvgReward(10): 192.80, ε=0.010
+    Frame 9371, AvgReward(10): 212.90, ε=0.010
+    Frame 11043, AvgReward(10): 167.20, ε=0.010
+    Frame 12795, AvgReward(10): 175.20, ε=0.010
+    Frame 14167, AvgReward(10): 137.20, ε=0.010
+    Frame 15680, AvgReward(10): 151.30, ε=0.010
+    Frame 17370, AvgReward(10): 169.00, ε=0.010
+    Frame 19104, AvgReward(10): 173.40, ε=0.010
+    Training complete.
+
+    -------------------------------------------------------------------------------------------------------
+
+    DQN on CartPole-v9-(hidden-dim=256, buffer_capacity=50000, batch_size=128):
+    Frame 258, AvgReward(10): 25.80, ε=0.680
+    Frame 378, AvgReward(10): 12.00, ε=0.537
+    Frame 496, AvgReward(10): 11.80, ε=0.426
+    Frame 598, AvgReward(10): 10.20, ε=0.350
+    Frame 704, AvgReward(10): 10.60, ε=0.285
+    Frame 805, AvgReward(10): 10.10, ε=0.234
+    Frame 921, AvgReward(10): 11.60, ε=0.188
+    Frame 1019, AvgReward(10): 9.80, ε=0.156
+    Frame 1126, AvgReward(10): 10.70, ε=0.128
+    Frame 1246, AvgReward(10): 12.00, ε=0.103
+    Frame 1342, AvgReward(10): 9.60, ε=0.087
+    Frame 1441, AvgReward(10): 9.90, ε=0.073
+    Frame 1536, AvgReward(10): 9.50, ε=0.062
+    Frame 1639, AvgReward(10): 10.30, ε=0.052
+    Frame 1739, AvgReward(10): 10.00, ε=0.045
+    Frame 1841, AvgReward(10): 10.20, ε=0.038
+    Frame 1949, AvgReward(10): 10.80, ε=0.033
+    Frame 2044, AvgReward(10): 9.50, ε=0.029
+    Frame 2155, AvgReward(10): 11.10, ε=0.025
+    Frame 2251, AvgReward(10): 9.60, ε=0.022
+    Frame 2349, AvgReward(10): 9.80, ε=0.020
+    Frame 2444, AvgReward(10): 9.50, ε=0.018
+    Frame 2571, AvgReward(10): 12.70, ε=0.017
+    Frame 2705, AvgReward(10): 13.40, ε=0.015
+    Frame 2822, AvgReward(10): 11.70, ε=0.014
+    Frame 2964, AvgReward(10): 14.20, ε=0.013
+    Frame 3136, AvgReward(10): 17.20, ε=0.012
+    Frame 3431, AvgReward(10): 29.50, ε=0.011
+    Frame 3713, AvgReward(10): 28.20, ε=0.011
+    Frame 4004, AvgReward(10): 29.10, ε=0.010
+    Frame 4515, AvgReward(10): 51.10, ε=0.010
+    Frame 6267, AvgReward(10): 175.20, ε=0.010
+    Frame 9958, AvgReward(10): 369.10, ε=0.010
+    Frame 11665, AvgReward(10): 170.70, ε=0.010
+    Frame 13484, AvgReward(10): 181.90, ε=0.010
+    Frame 15121, AvgReward(10): 163.70, ε=0.010
+    Frame 16934, AvgReward(10): 181.30, ε=0.010
+    Frame 18774, AvgReward(10): 184.00, ε=0.010
+    Training complete.

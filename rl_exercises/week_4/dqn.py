@@ -14,7 +14,7 @@ from omegaconf import DictConfig
 from rl_exercises.agent import AbstractAgent
 from rl_exercises.week_4.buffers import ReplayBuffer
 from rl_exercises.week_4.networks import QNetwork
-
+import matplotlib.pyplot as plt
 
 def set_seed(env: gym.Env, seed: int = 0) -> None:
     """
@@ -134,7 +134,9 @@ class DQNAgent(AbstractAgent):
         # TODO: implement exponential‐decayin
         # ε = ε_final + (ε_start - ε_final) * exp(-total_steps / ε_decay)
         # Currently, it is constant and returns the starting value ε
-        return self.epsilon_start
+        return self.epsilon_final + (
+            self.epsilon_start - self.epsilon_final
+            ) * np.exp(-self.total_steps / self.epsilon_decay)
 
     def predict_action(
         self, state: np.ndarray, info: Dict[str, Any] = {}, evaluate: bool = False
@@ -162,16 +164,21 @@ class DQNAgent(AbstractAgent):
             # purely greedy
             t = torch.tensor(state, dtype=torch.float32).unsqueeze(0)
             with torch.no_grad():
-                qvals = ...
-            action = None
+                qvals = self.q(t)
+            action = torch.argmax(qvals, dim=1).item()
         else:
             # ε-greedy
             if np.random.rand() < self.epsilon():
                 # TODO: sample random action
-                action = None
+                action = self.env.action_space.sample()
             else:
                 # TODO: select purely greedy action from Q(s)
-                action = None
+                t = torch.tensor(state, dtype=torch.float32).unsqueeze(0)
+
+                with torch.no_grad():
+                    qvals = self.q(t)
+
+                action = torch.argmax(qvals, dim=1).item()
 
         return action
 
@@ -231,11 +238,13 @@ class DQNAgent(AbstractAgent):
 
         # current Q estimates for taken actions
         # TODO: pass batched states through self.q and gather Q(s,a)
-        pred = ...
+        pred = self.q(s).gather(1, a).squeeze(1)
 
         # TODO: compute TD target with frozen network
         with torch.no_grad():
-            target = ...
+            next_q = self.target_q(s_next).max(dim=1)[0]
+
+            target = r + self.gamma * next_q * (1 - mask)
 
         loss = nn.MSELoss()(pred, target)
 
@@ -251,6 +260,44 @@ class DQNAgent(AbstractAgent):
         self.total_steps += 1
         return float(loss.item())
 
+    def plot_training_curve(
+        self,
+        frames: List[int],
+        rewards: List[float],
+        title: str,
+        save_path: str,
+    ) -> None:
+        """
+        Plot DQN training curve.
+
+        Parameters
+        ----------
+        frames : List[int]
+            Environment frames / training steps.
+        rewards : List[float]
+            Mean rewards corresponding to frames.
+        title : str
+            Plot title.
+        save_path : str
+            Path to save the figure.
+        """
+
+        plt.figure(figsize=(8, 5))
+
+        plt.plot(frames, rewards)
+
+        plt.xlabel("Frames")
+        plt.ylabel("Mean Reward")
+        plt.title(title)
+
+        plt.grid(True)
+
+        plt.tight_layout()
+
+        plt.savefig(save_path)
+
+        plt.close()
+
     def train(self, num_frames: int, eval_interval: int = 1000) -> None:
         """
         Run a training loop for a fixed number of frames.
@@ -262,6 +309,9 @@ class DQNAgent(AbstractAgent):
         eval_interval : int
             Every this many episodes, print average reward.
         """
+        frame_history = []
+        reward_history = []
+
         state, _ = self.env.reset()
         ep_reward = 0.0
         recent_rewards: List[float] = []
@@ -278,7 +328,7 @@ class DQNAgent(AbstractAgent):
             # update if ready
             if len(self.buffer) >= self.batch_size:
                 # TODO: sample batch from replay buffer
-                batch = ...
+                batch = self.buffer.sample(self.batch_size)
                 _ = self.update_agent(batch)
 
             if done or truncated:
@@ -288,13 +338,22 @@ class DQNAgent(AbstractAgent):
                 # logging
                 if len(recent_rewards) % 10 == 0:
                     # TODO: compute avg over last eval_interval episodes and print
-                    avg = ...
+                    avg = np.mean(recent_rewards[-10:])
+
+                    frame_history.append(frame)
+                    reward_history.append(avg)
+                    
                     print(
                         f"Frame {frame}, AvgReward(10): {avg:.2f}, ε={self.epsilon():.3f}"
                     )
 
         print("Training complete.")
-
+        self.plot_training_curve(
+            frame_history,
+            reward_history,
+            title="DQN on CartPole-v6-(hidden-dim=128, buffer_capacity=10000, batch_size=32)",
+            save_path="dqn_training_curve_v6.png",
+        )
 
 @hydra.main(config_path="../configs/agent/", config_name="dqn", version_base="1.1")
 def main(cfg: DictConfig):
@@ -303,11 +362,21 @@ def main(cfg: DictConfig):
     set_seed(env, cfg.seed)
 
     # 2) TODO: map config → agent kwargs
-    agent_kwargs = dict(...)
+    agent_kwargs = dict(
+        buffer_capacity=cfg.agent.buffer_capacity,
+        batch_size=cfg.agent.batch_size,
+        lr=cfg.agent.learning_rate,
+        gamma=cfg.agent.gamma,
+        epsilon_start=cfg.agent.epsilon_start,
+        epsilon_final=cfg.agent.epsilon_final,
+        epsilon_decay=cfg.agent.epsilon_decay,
+        target_update_freq=cfg.agent.target_update_freq,
+        seed=cfg.seed,
+    )
 
     # 3) TODO:instantiate & train
-    agent = ...
-    agent.train(...)
+    agent = DQNAgent(env, **agent_kwargs)
+    agent.train(cfg.train.num_frames, cfg.train.eval_interval)
 
 
 if __name__ == "__main__":
