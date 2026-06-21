@@ -149,31 +149,7 @@ class MarsRover(gym.Env):
         return self.position, reward, terminated, truncated, {}
 
         
-    def get_next_state(self, state: int, action: int) -> int:
-        """
-        Return the next state after taking an action in a given state.
-
-        Parameters
-        ----------
-        state : int
-            Current state.
-        action : int
-            Action to take (0: left, 1: right).
-
-        Returns
-        -------
-        int
-            Next state after applying the action, clipped to boundaries.
-        """
-        if action not in [0, 1]:
-            raise ValueError("Action must be 0 (left) or 1 (right).")
-
-        delta = -1 if action == 0 else 1
-        next_state = state + delta
-        next_state = max(0, min(self.observation_space.n - 1, next_state))
-        return next_state
-
-
+    
     def get_reward_per_action(self) -> np.ndarray:
         """
         Return the expected reward function R[s, a] for each (state, action) pair.
@@ -197,6 +173,7 @@ class MarsRover(gym.Env):
                     expected_reward += T[s, a, next_s] * self.rewards[next_s]
                 R[s, a] = float(expected_reward)
         return R
+
 
     def get_next_state(self, state: int, action: int) -> int:
         """
